@@ -148,47 +148,65 @@ Parameter
 * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 *
 * .. list-table::
-*    :widths: 25 75
+*    :widths: 25 50 75
 *    :header-rows: 1
 *
 *    * - Parameter name
 *      - Index names
+*      - Explanatory comments
 *    * - input [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act`` | ``mode`` |
 *        ``node_origin`` | ``commodity`` | ``level`` | ``time`` | ``time_origin``
+*      - relative share of input per unit of activity
 *    * - output [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act`` | ``mode`` |
 *        ``node_dest`` | ``commodity`` | ``level`` | ``time`` | ``time_dest``
+*      - relative share of output per unit of activity
 *    * - inv_cost [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - investment costs (per unit of new capacity)
 *    * - fix_cost [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act``
+*      - fixed costs per year (per unit of capacity maintained)
 *    * - var_cost [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act`` | ``mode`` | ``time``
+*      - variable costs of operation (per unit of capacity maintained)
 *    * - levelized_cost [#levelizedcost]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``time``
-*    * - construction_time
+*      - levelized costs (per unit of new capacity)
+*    * - construction_time [#construction]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - duration of construction of new capacity (in years)
 *    * - technical_lifetime
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - maximum technical lifetime (from year of construction)
 *    * - capacity_factor [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act`` | ``time``
+*      - capacity factor by subannual time slice
 *    * - operation_factor [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act``
+*      - yearly total operation factor
 *    * - min_utilization_factor [#tecvintage]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act``
+*      - yearly minimum utilization factor
 *    * - rating_bin [#rating]_
 *      - ``node`` | ``technology`` | ``year_act`` | ``commodity`` | ``level`` | ``time`` | ``rating``
+*      - maximum share of technology in commodity use per rating
 *    * - reliability_factor [#peakload]_
 *      - ``node`` | ``technology`` | ``year_act`` | ``commodity`` | ``level`` | ``time`` | ``rating``
+*      - reliability of a technology (per rating)
 *    * - flexibility_factor
 *      - ``node_loc`` | ``technology`` | ``year_vtg`` | ``year_act`` | ``mode`` | ``commodity`` | ``level`` | ``time`` | ``rating``
+*      - contribution of technologies towards operation flexibility constraint
 *    * - renewable_capacity_factor
 *      - ``node_loc`` | ``commodity`` | ``grade`` | ``level`` | ``year``
+*      - quality of renewable potential grade (>= 1)
 *    * - renewable_potential
 *      - ``node`` | ``commodity`` | ``grade`` | ``level`` | ``year``
+*      - size of renewable potential per grade
 *    * - emission_factor
 *      - ``node_loc`` | ``tec`` | ``year_vtg`` | ``year_act`` | ``mode`` | ``emission``
+*      - emission intensity of activity
 *
 * .. [#tecvintage] Fixed and variable cost parameters and technical specifications are indexed over both
 *    the year of construction (vintage) and the year of operation (actual).
@@ -235,23 +253,30 @@ Parameters
 * The following parameters specify upper and lower bounds on new capacity, total installed capacity, and activity.
 *
 * .. list-table::
-*    :widths: 20 80
+*    :widths: 20 30 50
 *    :header-rows: 1
 *
 *    * - Parameter name
 *      - Index names
+*      - Explanatory comments
 *    * - bound_new_capacity_up
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - upper bound on new capacity
 *    * - bound_new_capacity_lo
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - lower bound on new capacity
 *    * - bound_total_capacity_up
 *      - ``node_loc`` | ``tec`` | ``year_act``
+*      - upper bound on total installed capacity
 *    * - bound_total_capacity_lo
 *      - ``node_loc`` | ``tec`` | ``year_act``
+*      - lower bound on total installed capacity
 *    * - bound_activity_up
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``mode`` | ``time``
+*      - upper bound on activity (aggregated over all vintages)
 *    * - bound_activity_lo
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``mode`` | ``time``
+*      - lower bound on activity
 *
 * The bounds on activity are implemented as the aggregate over all vintages in a specific period
 * (cf. Equation ``ACTIVITY_BOUND_UP`` and ``ACTIVITY_BOUND_LO``).
@@ -273,35 +298,48 @@ Parameters
 * The following parameters specify constraints on the growth of new capacity and activity, i.e., market penetration.
 *
 * .. list-table::
-*    :widths: 30 70
+*    :widths: 30 50 70 
 *    :header-rows: 1
 *
 *    * - Parameter name
 *      - Index names
+*      - Explanatory comments
 *    * - initial_new_capacity_up
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - dynamic upper bound on new capacity (fixed initial term)
 *    * - growth_new_capacity_up [#mpx]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - dynamic upper bound on new capacity (growth rate)
 *    * - soft_new_capacity_up [#mpx]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - soft relaxation of dynamic upper bound on new capacity (growth rate)
 *    * - initial_new_capacity_lo
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - dynamic lower bound on new capacity (fixed initial term)
 *    * - growth_new_capacity_lo [#mpx]_
 *      - ``node_loc`` | ``tec_actual`` | ``year_vtg``
+*      - dynamic lower bound on new capacity (growth rate)
 *    * - soft_new_capacity_lo [#mpx]_
 *      - ``node_loc`` | ``tec`` | ``year_vtg``
+*      - soft relaxation of dynamic lower bound on new capacity (growth rate)
 *    * - initial_activity_up [#mpa]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - dynamic upper bound on activity (fixed initial term)
 *    * - growth_activity_up [#mpx]_ [#mpa]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - dynamic upper bound on activity (growth rate)
 *    * - soft_activity_up [#mpx]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - soft relaxation of dynamic upper bound on activity (growth rate)
 *    * - initial_activity_lo [#mpa]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - dynamic lower bound on activity (fixed initial term)
 *    * - growth_activity_lo [#mpx]_ [#mpa]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - dynamic lower bound on activity (growth rate)
 *    * - soft_activity_lo [#mpx]_
 *      - ``node_loc`` | ``tec`` | ``year_act`` | ``time``
+*      - soft relaxation of dynamic lower bound on activity (growth rate)
 *
 * .. [#mpx] All parameters related to the dynamic constraints are understood as the bound on the rate
 *    of growth/decrease, not as in percentage points and not as (1+growth rate).
